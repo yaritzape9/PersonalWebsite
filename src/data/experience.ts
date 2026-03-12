@@ -57,23 +57,23 @@ export const skills: SkillCategory[] = [
 
 export const highlights: WorkHighlight[] = [
   {
-    title: "Payments & Billing Systems",
+    title: "Payments Systems Engineering",
     description:
-      "Built backend features supporting billing workflows including refunds, receipt generation, currency formatting, and installment payment logic across multiple microservices."
+      "Worked on large-scale payment systems including billing flows, refunds, currency formatting, installment logic, and receipt generation across multiple backend services."
   },
   {
-    title: "International Payment Support",
+    title: "International Payment Features",
     description:
-      "Implemented localization support for international payment flows, handling currency formatting, installment calculations, and multi-locale user experiences."
+      "Contributed to installment-based payment support for international markets, implementing backend service changes, API integrations, and frontend state management for checkout flows."
   },
   {
-    title: "Notification System Migration",
+    title: "Notification Platform Migration",
     description:
-      "Migrated multiple email, SMS, and push notifications to a modern event-driven notification platform by implementing event triggers, data hydration layers, and service integrations."
+      "Migrated multiple transactional notifications (email, SMS, push) to a modern event-driven notification platform, implementing backend data hydration and frontend email templates."
   },
   {
-    title: "Legacy API Migration",
+    title: "API Lifecycle Management",
     description:
-      "Led migration of legacy service endpoints to modern APIs using feature flags and staged rollouts to maintain backward compatibility and prevent production disruptions."
+      "Led deprecation and migration of legacy API endpoints across multiple services, coordinating caller migrations and using feature flags to ensure safe production rollouts."
   }
-];
+]
