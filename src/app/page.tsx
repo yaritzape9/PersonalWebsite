@@ -1,5 +1,5 @@
-import HighlightsSection from "@/src/components/HighlightsSection";
-import SkillsSection from "@/src/components/SkillsSection";
+import HighlightsSection from "@/components/HighlightsSection";
+import SkillsSection from "@/components/SkillsSection";
 
 export default function Home() {
   return (
