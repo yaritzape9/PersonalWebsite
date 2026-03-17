@@ -1,26 +1,23 @@
-import { NextRequest, NextResponse } from "next/server" 
+import { NextRequest, NextResponse } from "next/server"
+
+const JAVA_SERVICE_URL = process.env.JAVA_SERVICE_URL
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
-    const amount = searchParams.get("amount")
-    const currency = searchParams.get("currency") || "USD"
-    const locale = searchParams.get("locale") || "en-US"
+    const params = new URLSearchParams({
+      amount: searchParams.get("amount") || "",
+      currency: searchParams.get("currency") || "USD",
+      locale: searchParams.get("locale") || "en-US",
+    })
 
-    if (!amount || isNaN(Number(amount))) {
-      return NextResponse.json(
-        { error: "Invalid or missing amount" },
-        { status: 400 }
-      )
-    }
-
-    const formatted = new Intl.NumberFormat(locale, {
-      style: "currency",
-      currency,
-    }).format(Number(amount))
-
-    return NextResponse.json({ formatted, amount, currency, locale })
+    const res = await fetch(`${JAVA_SERVICE_URL}/api/currency/format?${params}`)
+    const data = await res.json()
+    return NextResponse.json(data)
   } catch (error) {
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Java service unavailable" },
+      { status: 503 }
+    )
   }
 }
