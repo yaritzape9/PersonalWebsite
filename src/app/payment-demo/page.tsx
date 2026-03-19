@@ -29,14 +29,13 @@ const LOCALES = [
 ]
 
 export default function PaymentDemoPage() {
-  const [amount, setAmount] = useState("")
+  const [amount, setAmount] = useState("100")
   const [selectedLocale, setSelectedLocale] = useState(LOCALES[0])
   const [loading, setLoading] = useState(false)
   const [formatResult, setFormatResult] = useState<CurrencyResult | null>(null)
   const [retryResult, setRetryResult] = useState<RetryResult | null>(null)
 
   async function handleSubmit() {
-    if (!amount) return
     setLoading(true)
     setFormatResult(null)
     setRetryResult(null)
@@ -79,7 +78,7 @@ export default function PaymentDemoPage() {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder="100"
-            className="w-full border rounded-lg px-4 py-2 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+            className={`w-full border rounded-lg px-4 py-2 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 ${amount === "100" ? "text-gray-400" : ""}`}
           />
         </div>
 

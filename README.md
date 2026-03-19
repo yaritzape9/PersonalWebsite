@@ -9,16 +9,15 @@ yaritzaperez.tech
 ## Tech Stack
 
 - **Frontend:** Next.js (App Router), React, TypeScript, Tailwind CSS
-- **Backend:** Next.js API Routes, Service Layer, Typed Data Models
+- **Backend:** Next.js API Routes (gateway), Java Spring Boot (business logic)
 - **Testing:** Jest, ts-jest
-- **Deployment:** Vercel
+- **Deployment:** Vercel (Next.js), Railway (Java service — coming soon)
 
 ## Architecture
 ```
-Next.js UI
-  → API Routes (gateway layer)
-    → Service Layer (business logic)
-      → Data Layer (typed models)
+Browser
+  → Next.js (frontend + API gateway) — Vercel
+    → Java Spring Boot (business logic) — Railway (coming soon)
 ```
 
 ## Features
@@ -29,24 +28,31 @@ Next.js UI
 - Contact page
 - Jest integration tests for API routes
 
-## Planned: Java Backend Migration
-
-The Next.js API layer is designed to act as a gateway to a Java Spring Boot microservice.
-The TypeScript service layer will be replaced by a Spring Boot backend, demonstrating
-a production-style polyglot architecture.
-```
-Next.js (gateway) → Java Spring Boot (business logic)
-```
-
-This mirrors real-world systems used at companies like Stripe, Block, and Adyen.
-
 ## Running Locally
+
+You need both services running simultaneously.
+
+**Next.js:**
 ```bash
 npm install
 npm run dev
 ```
 
+**Java Spring Boot (in a separate terminal):**
+```bash
+cd ../payments-service-demo
+mvn spring-boot:run
+```
+
+Then visit `http://localhost:3000`
+
 ## Running Tests
 ```bash
 npm test
 ```
+
+## Planned
+
+- Deploy Java service to Railway
+- Add projects page
+- Engineering writeups page
