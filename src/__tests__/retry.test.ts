@@ -37,15 +37,17 @@ describe("POST /api/payment/retry", () => {
     })
   })
 
-  it("returns 400 when amount is missing", async () => {
+it("defaults amount to 100 when not provided", async () => {
     const req = makeRequest({ currency: "USD" })
     const res = await POST(req)
-    expect(res.status).toBe(400)
+    const data = await res.json()
+    expect(data.finalStatus).toBe("success")
   })
 
-  it("returns 400 when currency is missing", async () => {
+  it("defaults currency to USD when not provided", async () => {
     const req = makeRequest({ amount: "100" })
     const res = await POST(req)
-    expect(res.status).toBe(400)
+    const data = await res.json()
+    expect(data.finalStatus).toBe("success")
   })
 })

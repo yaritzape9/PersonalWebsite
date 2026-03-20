@@ -8,6 +8,9 @@ export async function GET(
 ) {
   const { id } = await params;
   const res = await fetch(`${JAVA_BASE}/api/payment/state/${id}`);
+  if (res.status === 404) {
+    return NextResponse.json({ error: 'Payment not found' }, { status: 404 });
+  }
   const data = await res.json();
   return NextResponse.json(data, { status: res.status });
 }
