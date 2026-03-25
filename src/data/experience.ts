@@ -77,3 +77,16 @@ export const highlights: WorkHighlight[] = [
       "Led deprecation and migration of legacy API endpoints across multiple services, coordinating caller migrations and using feature flags to ensure safe production rollouts."
   }
 ]
+
+export const projects: Project[] = [
+  {
+    title: "yaritzaperez.tech",
+    description: "Personal portfolio with layered Next.js backend, Java Spring Boot payment microservice, and integration tests.",
+    technologies: ["Next.js", "TypeScript", "Java", "Spring Boot", "Tailwind"]
+  },
+  {
+    title: "Payment State Machine",
+    description: "PENDING → PROCESSING → SUCCESS/FAILED state machine across Java and Next.js with full proxy chain.",
+    technologies: ["Java", "Spring Boot", "Next.js", "Jest"]
+  }
+]
