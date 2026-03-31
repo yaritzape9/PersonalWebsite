@@ -28,6 +28,12 @@ const LOCALES = [
   { label: "Brazil (pt-BR)", value: "pt-BR", currency: "BRL" },
 ]
 
+const STATUS_ICON: Record<string, string> = {
+  success: "✓",
+  declined: "✕",
+  network_failure: "↺",
+}
+
 export default function PaymentDemoPage() {
   const [amount, setAmount] = useState("100")
   const [selectedLocale, setSelectedLocale] = useState(LOCALES[0])
@@ -63,79 +69,164 @@ export default function PaymentDemoPage() {
   }
 
   return (
-    <main className="max-w-2xl mx-auto p-8 min-h-screen">
-      <h1 className="text-4xl font-bold mb-2">Payment Demo</h1>
-      <p className="text-gray-600 dark:text-gray-300 mb-8">
-        Enter a payment amount and select a market. The demo will format the amount
-        for that locale and simulate a payment with retry logic.
-      </p>
+    <main className="min-h-screen bg-white dark:bg-black">
+      {/* Subtle grid background */}
+      <div
+        className="fixed inset-0 opacity-[0.03] dark:opacity-[0.07] pointer-events-none"
+        style={{
+          backgroundImage: `linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)`,
+          backgroundSize: "32px 32px",
+        }}
+    />
 
-      <div className="space-y-4 mb-6">
-        <div>
-          <label className="block text-sm font-medium mb-1">Amount</label>
-          <input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="100"
-            className={`w-full border rounded-lg px-4 py-2 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 ${amount === "100" ? "text-gray-400" : ""}`}
-          />
-        </div>
+      <div className="relative max-w-2xl mx-auto px-8 py-16">
 
-        <div>
-          <label className="block text-sm font-medium mb-1">Market</label>
-          <select
-            value={selectedLocale.value}
-            onChange={(e) =>
-              setSelectedLocale(LOCALES.find((l) => l.value === e.target.value) || LOCALES[0])
-            }
-            className="w-full border rounded-lg px-4 py-2 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-          >
-            {LOCALES.map((l) => (
-              <option key={l.value} value={l.value}>{l.label}</option>
-            ))}
-          </select>
-        </div>
+        {/* Header */}
+        <div className="mb-12">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-mono tracking-widest uppercase text-gray-400">
+              Live · payments-service-demo
+            </span>
+          </div>
+          <h1 className="text-5xl font-bold tracking-tight mb-3">
+            Payment Demo
+          </h1>
+          <p className="text-gray-500 dark:text-gray-400 leading-relaxed max-w-md">
+            Locale-aware currency formatting and retry simulation,
+            powered by a Java Spring Boot microservice.
+          </p>
 
-        <button
-          onClick={handleSubmit}
-          disabled={loading}
-          className="w-full py-2 px-4 rounded-lg font-medium bg-black dark:bg-white text-white dark:text-black hover:opacity-80 transition disabled:opacity-50"
-        >
-          {loading ? "Processing..." : "Submit Payment"}
-        </button>
-      </div>
-
-      {formatResult && (
-        <div className="border rounded-lg p-6 border-gray-200 dark:border-gray-700 mb-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Payment Amount</p>
-          <p className="text-4xl font-bold">{formatResult.formatted}</p>
-          <p className="text-xs text-gray-400 mt-1">{formatResult.currency} · {formatResult.locale}</p>
-        </div>
-      )}
-
-      {retryResult && (
-        <div className="border rounded-lg p-6 border-gray-200 dark:border-gray-700">
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">Payment Processing</p>
-          <div className="space-y-2">
-            {retryResult.attempts.map((a) => (
-              <div
-                key={a.attempt}
-                className={`text-sm p-3 rounded-lg ${
-                  a.status === "success"
-                    ? "bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400"
-                    : "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400"
-                }`}
+          {/* Tech stack pills */}
+          <div className="flex gap-2 mt-5 flex-wrap">
+            {["Java", "Spring Boot", "Next.js", "TypeScript"].map((t) => (
+              <span
+                key={t}
+                className="text-xs px-3 py-1 rounded-full border border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 font-mono"
               >
-                <span className="font-medium">Attempt {a.attempt}:</span> {a.message}
-              </div>
+                {t}
+              </span>
             ))}
           </div>
-          <p className={`text-sm font-semibold mt-3 ${retryResult.finalStatus === "success" ? "text-green-600" : "text-red-500"}`}>
-            Final status: {retryResult.finalStatus.toUpperCase()}
-          </p>
         </div>
-      )}
+
+        {/* Form card */}
+        <div className="rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden mb-5 shadow-sm">
+          {/* Card header bar */}
+          <div className="px-6 py-3 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-gray-300 dark:bg-gray-700" />
+            <span className="w-2.5 h-2.5 rounded-full bg-gray-300 dark:bg-gray-700" />
+            <span className="w-2.5 h-2.5 rounded-full bg-gray-300 dark:bg-gray-700" />
+            <span className="ml-2 text-xs font-mono text-gray-400">payment.config</span>
+          </div>
+
+          <div className="p-6 space-y-5 bg-white dark:bg-gray-950">
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">
+                Amount
+              </label>
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="100"
+                className="w-full border rounded-xl px-4 py-3 bg-gray-50 dark:bg-black border-gray-200 dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700 text-2xl font-mono font-bold tracking-tight"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">
+                Market
+              </label>
+              <select
+                value={selectedLocale.value}
+                onChange={(e) =>
+                  setSelectedLocale(LOCALES.find((l) => l.value === e.target.value) || LOCALES[0])
+                }
+                className="w-full border rounded-xl px-4 py-3 bg-gray-50 dark:bg-black border-gray-200 dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-700 font-mono"
+              >
+                {LOCALES.map((l) => (
+                  <option key={l.value} value={l.value}>{l.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <button
+              onClick={handleSubmit}
+              disabled={loading}
+              className="w-full py-3 px-4 rounded-xl font-semibold bg-black dark:bg-white text-white dark:text-black hover:opacity-80 transition-all disabled:opacity-30 text-sm tracking-wide flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white dark:border-black border-t-transparent rounded-full animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                "Submit Payment →"
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Currency result */}
+        {formatResult && (
+          <div className="rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden mb-5 shadow-sm">
+            <div className="px-6 py-3 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
+              <span className="text-xs font-mono uppercase tracking-widest text-gray-400">
+                Formatted Amount
+              </span>
+            </div>
+            <div className="p-6 bg-white dark:bg-gray-950">
+              <p className="text-6xl font-bold tracking-tight">{formatResult.formatted}</p>
+              <p className="text-xs font-mono text-gray-400 mt-3 flex gap-3">
+                <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-900 rounded">
+                  {formatResult.currency}
+                </span>
+                <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-900 rounded">
+                  {formatResult.locale}
+                </span>
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Retry log */}
+        {retryResult && (
+          <div className="rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
+            <div className="px-6 py-3 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 flex items-center justify-between">
+              <span className="text-xs font-mono uppercase tracking-widest text-gray-400">
+                Processing Log
+              </span>
+              <span className={`text-xs font-mono font-bold px-2.5 py-1 rounded-full ${
+                retryResult.finalStatus === "success"
+                  ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400"
+                  : "bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400"
+              }`}>
+                {retryResult.finalStatus.toUpperCase()}
+              </span>
+            </div>
+            <div className="p-4 bg-white dark:bg-gray-950 space-y-2 font-mono text-sm">
+              {retryResult.attempts.map((a) => (
+                <div
+                  key={a.attempt}
+                  className={`flex items-start gap-3 px-4 py-3 rounded-xl ${
+                    a.status === "success"
+                      ? "bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400"
+                      : "bg-red-50 dark:bg-red-950/50 text-red-500 dark:text-red-400"
+                  }`}
+                >
+                  <span className="font-bold shrink-0">{STATUS_ICON[a.status] ?? "·"}</span>
+                  <span>
+                    <span className="font-bold">attempt_{a.attempt}</span>
+                    <span className="opacity-40 mx-2">›</span>
+                    {a.message}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </main>
   )
 }
