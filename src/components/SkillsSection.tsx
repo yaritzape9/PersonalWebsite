@@ -19,21 +19,35 @@ export default function SkillsSection() {
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <p className="text-gray-400 mt-12">Loading skills...</p>
-  if (error) return <p className="text-red-500 mt-12">{error}</p>
+  if (loading) return (
+    <section>
+      <div className="h-4 w-24 bg-gray-100 dark:bg-gray-800 rounded animate-pulse mb-8" />
+      {[...Array(3)].map((_, i) => (
+        <div key={i} className="h-16 bg-gray-100 dark:bg-gray-800 rounded-xl mb-3 animate-pulse" />
+      ))}
+    </section>
+  )
+
+  if (error) return <p className="text-red-500">{error}</p>
 
   return (
-    <section className="mt-12">
-      <h2 className="text-2xl font-bold mb-6">Technical Skills</h2>
+    <section>
+      <p className="text-xs font-mono uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-6">
+        Technical Skills
+      </p>
       <div className="space-y-6">
         {skills.map((category) => (
-          <div key={category.category}>
-            <h3 className="text-lg font-semibold">{category.category}</h3>
-            <div className="flex flex-wrap gap-2 mt-2">
+          <div key={category.category} className="flex gap-6">
+            <div className="w-28 shrink-0">
+              <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider pt-1">
+                {category.category}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
               {category.skills.map((skill) => (
                 <span
                   key={skill}
-                  className="px-3 py-1 rounded-full text-sm bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+                  className="text-xs px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-600 transition-colors"
                 >
                   {skill}
                 </span>

@@ -19,20 +19,41 @@ export default function HighlightsSection() {
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <p className="text-gray-400 mt-12">Loading highlights...</p>
-  if (error) return <p className="text-red-500 mt-12">{error}</p>
+  if (loading) return (
+    <section className="mb-16">
+      <div className="h-4 w-32 bg-gray-100 dark:bg-gray-800 rounded animate-pulse mb-8" />
+      {[...Array(3)].map((_, i) => (
+        <div key={i} className="h-24 bg-gray-100 dark:bg-gray-800 rounded-xl mb-3 animate-pulse" />
+      ))}
+    </section>
+  )
+
+  if (error) return <p className="text-red-500 mb-16">{error}</p>
 
   return (
-    <section className="mt-12">
-      <h2 className="text-2xl font-bold mb-6">Key Work Highlights</h2>
-      <div className="space-y-6">
-        {highlights.map((highlight) => (
+    <section className="mb-16">
+      <p className="text-xs font-mono uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-6">
+        Work Highlights
+      </p>
+      <div className="space-y-3">
+        {highlights.map((highlight, i) => (
           <div
             key={highlight.title}
-            className="border p-4 rounded-lg border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
+            className="group border border-gray-200 dark:border-gray-800 rounded-xl p-5 hover:border-gray-400 dark:hover:border-gray-600 transition-colors"
           >
-            <h3 className="text-xl font-semibold">{highlight.title}</h3>
-            <p className="text-gray-600 dark:text-gray-300 mt-2">{highlight.description}</p>
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                  {highlight.title}
+                </h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                  {highlight.description}
+                </p>
+              </div>
+              <span className="text-xs font-mono text-gray-300 dark:text-gray-700 shrink-0 mt-0.5">
+                0{i + 1}
+              </span>
+            </div>
           </div>
         ))}
       </div>
