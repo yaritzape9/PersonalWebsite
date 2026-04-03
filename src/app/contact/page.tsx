@@ -44,7 +44,7 @@ export default function ContactPage() {
 
       <div className="space-y-3">
         {links.map((link) => (
-          
+          <a
             key={link.label}
             href={link.href}
             target={link.href.startsWith("http") ? "_blank" : undefined}
